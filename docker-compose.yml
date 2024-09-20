@@ -1,0 +1,34 @@
+version: "3.9" 
+services:
+  app: 
+    container_name: springboot-postgresql
+    image: springboot-postgresql
+    build: ./
+    ports: 
+      - '8080:8080'
+    depends_on: 
+      - dbpostgresql
+  dbpostgresql:
+    image: postgres:10.21-alpine
+    #restart: always
+    container_name: dbpostgresql 
+    hostname: dbpostgresql
+    environment:
+     # POSTGRES_DB: microservicios
+       POSTGRES_USER: postgres
+       POSTGRES_PASSWORD: postgres
+     # PGDATA: /var/lib/postgresql/data/pgdata
+    logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+    ports:
+        - '5432:5432'
+    volumes: 
+        - ./postgres-volume/postgres-data:/var/lib/postgresql/data
+        - ./logs:/var/log
+        - ./sql/BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql
+
+        
+
+
